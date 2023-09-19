@@ -2,8 +2,9 @@ from django.shortcuts import render
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
-from django.http import HttpResponse
-from scipy import stats
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import os
 
 def get_pixel(img, center, x, y):
     new_value = 0
@@ -51,7 +52,7 @@ def find_mode_pixel_value(img):
     return mode_value
 
 def lbp(request):
-    path = 'media/kebonangung 50cm.jpeg'
+    path = 'media/lahan 4 50 cm.jpeg'
     img_bgr = cv2.imread(path, 1)
     img_gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
     mode_pixel = find_mode_pixel_value(img_gray)
@@ -106,22 +107,79 @@ def lbp(request):
         print("Sangat Tinggi")
     else:
         print("Lebih dari atau sama dengan 2")
-
-    # Hitung histogram LBP yang telah dinormalisasi
     lbp_histogram = calculate_normalized_lbp_histogram(img_gray)
-
-    # Cetak nilai-nilai LBP yang telah dinormalisasi
-    # print("Nilai-nilai LBP yang telah dinormalisasi:")
-    # for i, nilai in enumerate(lbp_histogram):
-    #     print(f'LBP Nilai {i}: {nilai}')
-
-    # Plot histogram LBP yang telah dinormalisasi
-    # plt.bar(range(len(lbp_histogram)), lbp_histogram)
-    # plt.xlabel('Nilai LBP')
-    # plt.ylabel('Frekuensi yang Dinormalisasi')
-    # plt.title('Histogram LBP yang Dinormalisasi')
-    # plt.show()
-
     print("Program LBP selesai")
-
 lbp(None)
+
+
+@csrf_exempt
+def upload_image(request):
+    if request.method == 'POST' and request.FILES['image']:
+        uploaded_image = request.FILES['image']
+        image_path = os.path.join('media', 'uploaded_images', uploaded_image.name)
+
+        with open(image_path, 'wb+') as destination:
+            for chunk in uploaded_image.chunks():
+                destination.write(chunk)
+
+        path = image_path
+        img_bgr = cv2.imread(path, 1)
+        img_gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
+        mode_pixel = find_mode_pixel_value(img_gray)
+        print(f"Nilai pixel yang paling sering muncul: {mode_pixel}")
+        normalized_mode_pixel = mode_pixel / 255.0  
+        print(f"Nilai yang sering muncul yang telah dinormalisasi: {normalized_mode_pixel}")    
+        
+        hasil_operasi_Natrium = (normalized_mode_pixel * 0.1928 + 0.021)
+        print(f"hasil Nilai N (Natrium): {hasil_operasi_Natrium}")
+        N = hasil_operasi_Natrium
+        if N < 1:
+            print("Sangat rendah")
+        elif N >= 1 and N < 2:
+            print("Rendah")
+        elif N >= 2.001 and N < 3:
+            print("Sedang")
+        elif N >= 3.001 and N < 5:
+            print("Tinggi")
+        elif N >= 5.001:
+            print("Sangat Tinggi")
+        else:
+            print("Ketegori Tidak Ditemukan")
+        
+        hasil_operasi_fosfor = (normalized_mode_pixel * -10.725) + 16.533
+        print(f"hasil Nilai P (Fosfor): {hasil_operasi_fosfor}")
+        P = hasil_operasi_fosfor
+        if P < 10:
+            print("Sangat rendah")
+        elif P >= 10 and P <= 25:
+            print("Rendah")
+        elif P >= 26 and P <= 45:
+            print("Sedang")
+        elif P >= 46 and P <= 60:
+            print("Tinggi")
+        elif P > 60:
+            print("Sangat Tinggi")
+        else:
+            print("Lebih dari atau sama dengan 2")
+        
+        hasil_operasi_Kalium = (normalized_mode_pixel * -0.1864 + 0.2471)
+        print(f"hasil Nilai K (Kalium): {hasil_operasi_Kalium}")
+        K = hasil_operasi_Kalium
+        if K < 0.1:
+            print("Sangat rendah")
+        elif K >= 0.1 and K <= 0.3:
+            print("Rendah")
+        elif K >= 0.4 and K <= 0.5:
+            print("Sedang")
+        elif K >= 0.6 and K <= 1.0:
+            print("Tinggi")
+        elif K > 1.0:
+            print("Sangat Tinggi")
+        else:
+            print("Lebih dari atau sama dengan 2")
+        lbp_histogram = calculate_normalized_lbp_histogram(img_gray)
+        print("Program LBP selesai")
+
+        return JsonResponse({'message': 'Gambar berhasil diunggah dan diproses'})
+    else:
+        return JsonResponse({'message': 'Permintaan tidak valid'})
