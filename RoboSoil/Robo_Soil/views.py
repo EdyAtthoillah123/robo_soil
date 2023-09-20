@@ -51,67 +51,6 @@ def find_mode_pixel_value(img):
     mode_value = int(np.median(img_flat))
     return mode_value
 
-def lbp(request):
-    path = 'media/lahan 4 50 cm.jpeg'
-    img_bgr = cv2.imread(path, 1)
-    img_gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
-    mode_pixel = find_mode_pixel_value(img_gray)
-    print(f"Nilai pixel yang paling sering muncul: {mode_pixel}")
-    normalized_mode_pixel = mode_pixel / 255.0  
-    print(f"Nilai yang sering muncul yang telah dinormalisasi: {normalized_mode_pixel}")    
-    
-    hasil_operasi_Natrium = (normalized_mode_pixel * 0.1928 + 0.021)
-    print(f"hasil Nilai N (Natrium): {hasil_operasi_Natrium}")
-    N = hasil_operasi_Natrium
-    if N < 1:
-        print("Sangat rendah")
-    elif N >= 1 and N < 2:
-        print("Rendah")
-    elif N >= 2.001 and N < 3:
-        print("Sedang")
-    elif N >= 3.001 and N < 5:
-        print("Tinggi")
-    elif N >= 5.001:
-        print("Sangat Tinggi")
-    else:
-        print("Ketegori Tidak Ditemukan")
-    
-    hasil_operasi_fosfor = (normalized_mode_pixel * -10.725) + 16.533
-    print(f"hasil Nilai P (Fosfor): {hasil_operasi_fosfor}")
-    P = hasil_operasi_fosfor
-    if P < 10:
-        print("Sangat rendah")
-    elif P >= 10 and P <= 25:
-        print("Rendah")
-    elif P >= 26 and P <= 45:
-        print("Sedang")
-    elif P >= 46 and P <= 60:
-        print("Tinggi")
-    elif P > 60:
-        print("Sangat Tinggi")
-    else:
-        print("Lebih dari atau sama dengan 2")
-    
-    hasil_operasi_Kalium = (normalized_mode_pixel * -0.1864 + 0.2471)
-    print(f"hasil Nilai K (Kalium): {hasil_operasi_Kalium}")
-    K = hasil_operasi_Kalium
-    if K < 0.1:
-        print("Sangat rendah")
-    elif K >= 0.1 and K <= 0.3:
-        print("Rendah")
-    elif K >= 0.4 and K <= 0.5:
-        print("Sedang")
-    elif K >= 0.6 and K <= 1.0:
-        print("Tinggi")
-    elif K > 1.0:
-        print("Sangat Tinggi")
-    else:
-        print("Lebih dari atau sama dengan 2")
-    lbp_histogram = calculate_normalized_lbp_histogram(img_gray)
-    print("Program LBP selesai")
-lbp(None)
-
-
 @csrf_exempt
 def upload_image(request):
     if request.method == 'POST' and request.FILES['image']:
@@ -134,49 +73,106 @@ def upload_image(request):
         print(f"hasil Nilai N (Natrium): {hasil_operasi_Natrium}")
         N = hasil_operasi_Natrium
         if N < 1:
-            print("Sangat rendah")
+            Kategori_N = 1
+            print(Kategori_N)
         elif N >= 1 and N < 2:
-            print("Rendah")
+            Kategori_N = 2
+            print(Kategori_N)
         elif N >= 2.001 and N < 3:
-            print("Sedang")
+            Kategori_N = 3
+            print(Kategori_N)
         elif N >= 3.001 and N < 5:
-            print("Tinggi")
+            Kategori_N = 4
+            print(Kategori_N)
         elif N >= 5.001:
-            print("Sangat Tinggi")
+            Kategori_N = 5
+            print(Kategori_N)
         else:
-            print("Ketegori Tidak Ditemukan")
+            Kategori_N = 6
+            print(Kategori_N)
         
         hasil_operasi_fosfor = (normalized_mode_pixel * -10.725) + 16.533
         print(f"hasil Nilai P (Fosfor): {hasil_operasi_fosfor}")
         P = hasil_operasi_fosfor
         if P < 10:
-            print("Sangat rendah")
+            Kategori_P = 1
+            print(Kategori_P)
         elif P >= 10 and P <= 25:
-            print("Rendah")
+            Kategori_P = 2
+            print(Kategori_P)
         elif P >= 26 and P <= 45:
-            print("Sedang")
+            Kategori_P = 3
+            print(Kategori_P)
         elif P >= 46 and P <= 60:
-            print("Tinggi")
+            Kategori_P = 4
+            print(Kategori_P)
         elif P > 60:
-            print("Sangat Tinggi")
+            Kategori_P = 5
+            print(Kategori_P)
         else:
-            print("Lebih dari atau sama dengan 2")
+            Kategori_P = 6
+            print(Kategori_P)
         
         hasil_operasi_Kalium = (normalized_mode_pixel * -0.1864 + 0.2471)
         print(f"hasil Nilai K (Kalium): {hasil_operasi_Kalium}")
         K = hasil_operasi_Kalium
         if K < 0.1:
-            print("Sangat rendah")
+            Kategori_K = 1
+            print(Kategori_K)
         elif K >= 0.1 and K <= 0.3:
-            print("Rendah")
+            Kategori_K = 2
+            print(Kategori_K)
         elif K >= 0.4 and K <= 0.5:
-            print("Sedang")
+            Kategori_K = 3
+            print(Kategori_K)
         elif K >= 0.6 and K <= 1.0:
-            print("Tinggi")
+            Kategori_K = 4
+            print(Kategori_K)
         elif K > 1.0:
-            print("Sangat Tinggi")
+            Kategori_K = 5
+            print(Kategori_K)
         else:
-            print("Lebih dari atau sama dengan 2")
+            Kategori_K = 6
+            print(Kategori_K)
+        
+        # Hasil perhitungan NPK
+        N = hasil_operasi_Natrium
+        P = hasil_operasi_fosfor
+        K = hasil_operasi_Kalium
+
+        # Nilai N, P, dan K yang ingin Anda cocokkan
+        target_N = 1
+        target_P = 2
+        target_K = 2
+
+        # Mencocokkan dengan kategori yang dihitung
+        if N <= target_N :
+            print("Perlu Perbaikan Nilai N")
+            if N == target_N :
+                print("Perlu Perbaikan N")
+        else:
+            print("Hasil tidak cocok dengan data yang diberikan.")
+            
+        if P <= target_P :
+            print("Perlu Perbaikan Nilai P")
+        else:
+            print("Hasil tidak cocok dengan data yang diberikan.")
+        
+        if K <= target_K :
+            print("Perlu Perbaikan Nilai K")
+        else:
+            print("Hasil tidak cocok dengan data yang diberikan.")
+
+        
+        # Rekomendasi_N = Kategori_N
+        # if Kategori_N <= 1:
+        #     Rekomendasi_N = "S3"
+        #     print(Rekomendasi_N)
+        # else:
+        #     Kategori_K = 6
+        #     print(Kategori_K)  
+        
+        # SaranTanaman = RekomendasiTanaman
         lbp_histogram = calculate_normalized_lbp_histogram(img_gray)
         print("Program LBP selesai")
 
