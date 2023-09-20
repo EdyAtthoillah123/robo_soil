@@ -70,109 +70,236 @@ def upload_image(request):
         print(f"Nilai yang sering muncul yang telah dinormalisasi: {normalized_mode_pixel}")    
         
         hasil_operasi_Natrium = (normalized_mode_pixel * 0.1928 + 0.021)
-        print(f"hasil Nilai N (Natrium): {hasil_operasi_Natrium}")
+        round_natrium = round(hasil_operasi_Natrium, 2) 
+        print(f"hasil Nilai N (Natrium): {round_natrium}")
         N = hasil_operasi_Natrium
-        if N < 1:
+        if N < 1.0:
             Kategori_N = 1
-            print(Kategori_N)
-        elif N >= 1 and N < 2:
+        elif N >= 1.0 and N < 2.0:
             Kategori_N = 2
-            print(Kategori_N)
-        elif N >= 2.001 and N < 3:
+        elif N >= 2.001 and N < 3.0:
             Kategori_N = 3
-            print(Kategori_N)
-        elif N >= 3.001 and N < 5:
+        elif N >= 3.001 and N < 5.0:
             Kategori_N = 4
-            print(Kategori_N)
         elif N >= 5.001:
             Kategori_N = 5
-            print(Kategori_N)
         else:
             Kategori_N = 6
-            print(Kategori_N)
         
         hasil_operasi_fosfor = (normalized_mode_pixel * -10.725) + 16.533
-        print(f"hasil Nilai P (Fosfor): {hasil_operasi_fosfor}")
+        round_fosfor = round(hasil_operasi_fosfor, 2) 
+        print(f"hasil Nilai P (Fosfor): {round_fosfor}")
         P = hasil_operasi_fosfor
-        if P < 10:
+        if P < 10.0:
             Kategori_P = 1
-            print(Kategori_P)
-        elif P >= 10 and P <= 25:
+        elif P > 10.001 and P <= 25.99:
             Kategori_P = 2
-            print(Kategori_P)
-        elif P >= 26 and P <= 45:
+        elif P >= 26.0 and P <= 45.99:
             Kategori_P = 3
-            print(Kategori_P)
-        elif P >= 46 and P <= 60:
+        elif P >= 46.0 and P <= 60:
             Kategori_P = 4
-            print(Kategori_P)
-        elif P > 60:
+        elif P > 60.001:
             Kategori_P = 5
-            print(Kategori_P)
         else:
             Kategori_P = 6
-            print(Kategori_P)
         
         hasil_operasi_Kalium = (normalized_mode_pixel * -0.1864 + 0.2471)
-        print(f"hasil Nilai K (Kalium): {hasil_operasi_Kalium}")
+        round_kalium = round(hasil_operasi_Kalium, 2) 
+        print(f"hasil Nilai K (Kalium): {round_kalium}")
         K = hasil_operasi_Kalium
         if K < 0.1:
             Kategori_K = 1
-            print(Kategori_K)
-        elif K >= 0.1 and K <= 0.3:
+        elif K >= 0.1 and K <= 0.3999999999:
             Kategori_K = 2
-            print(Kategori_K)
-        elif K >= 0.4 and K <= 0.5:
+        elif K >= 0.4 and K <= 0.599999999:
             Kategori_K = 3
-            print(Kategori_K)
         elif K >= 0.6 and K <= 1.0:
             Kategori_K = 4
-            print(Kategori_K)
-        elif K > 1.0:
+        elif K > 1.0001:
             Kategori_K = 5
-            print(Kategori_K)
         else:
             Kategori_K = 6
-            print(Kategori_K)
         
         # Hasil perhitungan NPK
-        N = hasil_operasi_Natrium
-        P = hasil_operasi_fosfor
-        K = hasil_operasi_Kalium
+        N = Kategori_N
+        P = Kategori_P
+        K = Kategori_K
 
         # Nilai N, P, dan K yang ingin Anda cocokkan
-        target_N = 1
-        target_P = 2
-        target_K = 2
-
-        # Mencocokkan dengan kategori yang dihitung
-        if N <= target_N :
-            print("Perlu Perbaikan Nilai N")
-            if N == target_N :
-                print("Perlu Perbaikan N")
+        target_N_sawah = 3
+        target_P_sawah = 4
+        target_K_sawah = 3
+        
+        # lahan sawah irigasi
+        if N >= target_N_sawah and P >= target_P_sawah and K < target_K_sawah:
+            SaranTanaman1 = "Kategori S1 Sangat Sesuai Untuk Ditanami Sawah Irigasi, Wortel, Bawang Merah, Bawang Putih"
+            print(SaranTanaman1)
+        elif N == 2 and P == 3 and K == 2:
+                SaranTanaman1 = "Kategori S2 Cukup Sesuai (Sedang) Untuk Ditanami Sawah Irigasi, Wortel, Bawang Merah, Bawang Putih Namun memerlukan tambahan pupuk"
+                print(SaranTanaman1)
+        elif N == 1 and P >= 2 or P == 1 and K == 1:
+                SaranTanaman1 = "Kategori S3 Sesuai Marginal (Rendah) Untuk Ditanami Sawah Irigasi, Wortel, Bawang Merah, Bawang Putih Namun memerlukan tambahan pupuk yang lebih banyak"
+                print(SaranTanaman1)
+        elif N >= 1 or N == 1 and P == 1 and K == 1:
+                SaranTanaman1 = "Kategori S3 Sesuai Marginal (Rendah) Untuk Ditanami Sawah Irigasi, Wortel, Bawang Merah, Bawang Putih Namun memerlukan tambahan pupuk yang lebih banyak"
+                print(SaranTanaman1)
+        elif N == 1 and P == 1 and K >= 1 or K == 1:
+                SaranTanaman1 = "Kategori S3 Sesuai Marginal (Rendah) Untuk Ditanami Sawah Irigasi, Wortel, Bawang Merah, Bawang Putih Namun memerlukan tambahan pupuk yang lebih banyak"
+                print(SaranTanaman1)
+        elif N == 1 and P >= 2 or P == 1 and K >= 1 or K == 1:
+                SaranTanaman1 = "Kategori S3 Sesuai Marginal (Rendah) Untuk Ditanami Sawah Irigasi, Wortel, Bawang Merah, Bawang Putih Namun memerlukan tambahan pupuk yang lebih banyak"
+                print(SaranTanaman1)
+        elif N >= 1 or N == 1 and P == 1 and K >= 1 or K == 1:
+                SaranTanaman1 = "Kategori S3 Sesuai Marginal (Rendah) Untuk Ditanami Sawah Irigasi, Wortel, Bawang Merah, Bawang Putih Namun memerlukan tambahan pupuk yang lebih banyak"
+                print(SaranTanaman1)
+        else:
+            SaranTanaman1 = "Tidak Cocok Untuk Ditanami Sawah Irigasi, Wortel, Bawang Merah, Bawang Putih Karena"
+            print(SaranTanaman1)
+            
+        if N < target_N_sawah :
+            SaranTanaman1 = "Perlu Perbaikan N Untuk ditanami Sawah Irigasi, Wortel, Bawang Merah, Bawang Putih"
+            print(SaranTanaman1)
+            if N >= target_N_sawah :
+                SaranTanaman1 = "Sangat Cocok Untuk Ditanami Sawah Irigasi, Wortel, Bawang Merah, Bawang Putih"
+                print(SaranTanaman1)
         else:
             print("Hasil tidak cocok dengan data yang diberikan.")
             
-        if P <= target_P :
-            print("Perlu Perbaikan Nilai P")
+        if P < target_P_sawah :
+            SaranTanaman1 = "Perlu Perbaikan P Untuk ditanami Sawah Irigasi, Wortel, Bawang Merah, Bawang Putih"
+            print(SaranTanaman1)
+            if P >= target_P_sawah :
+                SaranTanaman1 = "Sangat Cocok Untuk Ditanami Sawah Irigasi, Wortel, Bawang Merah, Bawang Putih"
+                print(SaranTanaman1)
         else:
             print("Hasil tidak cocok dengan data yang diberikan.")
         
-        if K <= target_K :
-            print("Perlu Perbaikan Nilai K")
+        if K < target_K_sawah :
+            SaranTanaman1 = "Perlu Perbaikan K Untuk ditanami Sawah Irigasi, Wortel, Bawang Merah, Bawang Putih"
+            print(SaranTanaman1)
+            if K >= target_K_sawah :
+                SaranTanaman1 = "Sangat Cocok Untuk Ditanami Sawah Irigasi, Wortel, Bawang Merah, Bawang Putih"
+                print(SaranTanaman1)
         else:
             print("Hasil tidak cocok dengan data yang diberikan.")
-
         
-        # Rekomendasi_N = Kategori_N
-        # if Kategori_N <= 1:
-        #     Rekomendasi_N = "S3"
-        #     print(Rekomendasi_N)
-        # else:
-        #     Kategori_K = 6
-        #     print(Kategori_K)  
+    
+        # Nilai N, P, dan K yang ingin Anda cocokkan
+        target_N_jagung = 3
+        target_P_jagung = 4
+        target_K_jagung = 4
         
-        # SaranTanaman = RekomendasiTanaman
+        # lahan sawah irigasi
+        if N >= target_N_jagung and P >= target_P_jagung and K < target_K_jagung:
+            SaranTanaman2 = "Kategori S1 Sangat Sesuai Untuk Ditanami Jagung, Sorgum, Gandum, Kedelai, Kacang Tanah"
+            print(SaranTanaman2)
+        elif N == 2 and P == 3 and K == 3:
+                SaranTanaman2 = "Kategori S2 Cukup Sesuai (Sedang) Untuk Ditanami Jagung, Sorgum, Gandum, Kedelai, Kacang Tanah Namun memerlukan tambahan pupuk"
+                print(SaranTanaman2)
+        elif N == 1 and P >= 2 or P == 1 and K == 2 :
+                SaranTanaman2 = "Kategori S3 Sesuai Marginal (Rendah) Untuk Ditanami Jagung, Sorgum, Gandum, Kedelai, Kacang Tanah Namun memerlukan tambahan pupuk yang lebih banyak"
+                print(SaranTanaman2)
+        elif N >= 1 or N == 1 and P == 1 and K == 1:
+                SaranTanaman2 = "Kategori S3 Sesuai Marginal (Rendah) Untuk Ditanami Jagung, Sorgum, Gandum, Kedelai, Kacang Tanah Namun memerlukan tambahan pupuk yang lebih banyak"
+                print(SaranTanaman2)
+        elif N == 1 and P == 1 and K >= 1 or K == 1:
+                SaranTanaman2 = "Kategori S3 Sesuai Marginal (Rendah) Untuk Ditanami Jagung, Sorgum, Gandum, Kedelai, Kacang Tanah Namun memerlukan tambahan pupuk yang lebih banyak"
+                print(SaranTanaman2)
+        elif N == 1 and P >= 2 or P == 1 and K >= 1 or K == 1:
+                SaranTanaman2 = "Kategori S3 Sesuai Marginal (Rendah) Untuk Ditanami Jagung, Sorgum, Gandum, Kedelai, Kacang Tanah Namun memerlukan tambahan pupuk yang lebih banyak"
+                print(SaranTanaman2)
+        elif N >= 1 or N == 1 and P == 1 and K >= 1 or K == 1:
+                SaranTanaman2 = "Kategori S3 Sesuai Marginal (Rendah) Untuk Ditanami Jagung, Sorgum, Gandum, Kedelai, Kacang Tanah Namun memerlukan tambahan pupuk yang lebih banyak"
+                print(SaranTanaman2)
+        else:
+            SaranTanaman2 = "Tidak Cocok Untuk Ditanami Jagung, Sorgum, Gandum, Kedelai, Kacang Tanah Karena"
+            print(SaranTanaman2)
+            
+        if N < target_N_jagung :
+            SaranTanaman2 = "Perlu Perbaikan N Untuk ditanami Jagung, Sorgum, Gandum, Kedelai, Kacang Tanah"
+            print(SaranTanaman2)
+            if N >= target_N_jagung :
+                SaranTanaman2 = "Sangat Cocok Untuk Ditanami Jagung, Sorgum, Gandum, Kedelai, Kacang Tanah"
+                print(SaranTanaman2)
+        else:
+            print("Hasil tidak cocok dengan data yang diberikan.")
+            
+        if P < target_P_jagung :
+            SaranTanaman2 = "Perlu Perbaikan P Untuk ditanami Jagung, Sorgum, Gandum, Kedelai, Kacang Tanah"
+            print(SaranTanaman2)
+            if P >= target_P_jagung :
+                SaranTanaman2 = "Sangat Cocok Untuk Ditanami Jagung, Sorgum, Gandum, Kedelai, Kacang Tanah"
+                print(SaranTanaman2)
+        else:
+            print("Hasil tidak cocok dengan data yang diberikan.")
+        
+        if K < target_K_jagung :
+            SaranTanaman2 = "Perlu Perbaikan K Untuk ditanami Jagung, Sorgum, Gandum, Kedelai, Kacang Tanah"
+            print(SaranTanaman2)
+            if K >= target_K_jagung :
+                SaranTanaman2 = "Sangat Cocok Untuk Ditanami Jagung, Sorgum, Gandum, Kedelai, Kacang Tanah"
+                print(SaranTanaman2)
+        else:
+            print("Hasil tidak cocok dengan data yang diberikan.")
+        
+        target_N_Ubi = 3
+        target_P_Ubi = 3
+        target_K_Ubi = 3
+        
+        # lahan sawah irigasi
+        if N >= target_N_Ubi and P >= target_P_Ubi and K < target_K_Ubi:
+            SaranTanaman3 = "Kategori S1 Sangat Sesuai Untuk ditanami Ubi Kayu, Ubi Jalar"
+            print(SaranTanaman3)
+        elif N == 2 and P == 2 and K == 2:
+                SaranTanaman3 = "Kategori S2 Cukup Sesuai (Sedang) Untuk ditanami Ubi Kayu, Ubi Jalar Namun memerlukan tambahan pupuk"
+                print(SaranTanaman3)
+        elif N == 1 and P >= 1 or P == 1 and K == 1 :
+                SaranTanaman3 = "Kategori S3 Sesuai Marginal (Rendah) Untuk ditanami Ubi Kayu, Ubi Jalar Namun memerlukan tambahan pupuk yang lebih banyak"
+                print(SaranTanaman3)
+        elif N >= 1 or N == 1 and P == 1 and K == 1:
+                SaranTanaman3 = "Kategori S3 Sesuai Marginal (Rendah) Untuk ditanami Ubi Kayu, Ubi Jalar Namun memerlukan tambahan pupuk yang lebih banyak"
+                print(SaranTanaman3)
+        elif N == 1 and P == 1 and K >= 1 or K == 1:
+                SaranTanaman3 = "Kategori S3 Sesuai Marginal (Rendah) Untuk ditanami Ubi Kayu, Ubi Jalar Namun memerlukan tambahan pupuk yang lebih banyak"
+                print(SaranTanaman3)
+        elif N == 1 and P >= 1 or P == 1 and K >= 1 or K == 1:
+                SaranTanaman3 = "Kategori S3 Sesuai Marginal (Rendah) Untuk ditanami Ubi Kayu, Ubi Jalar Namun memerlukan tambahan pupuk yang lebih banyak"
+                print(SaranTanaman3)
+        elif N >= 1 or N == 1 and P == 1 and K >= 1 or K == 1:
+                SaranTanaman3 = "Kategori S3 Sesuai Marginal (Rendah) Untuk ditanami Ubi Kayu, Ubi Jalar Namun memerlukan tambahan pupuk yang lebih banyak"
+                print(SaranTanaman3)
+        else:
+            SaranTanaman3 = "Tidak Cocok Untuk ditanami Ubi Kayu, Ubi Jalar Karena"
+            print(SaranTanaman3)
+            
+        if N < target_N_Ubi :
+            SaranTanaman3 = "Perlu Perbaikan N Untuk ditanami Ubi Kayu, Ubi Jalar"
+            print(SaranTanaman3)
+            if N >= target_N_Ubi :
+                SaranTanaman3 = "Sangat Cocok Untuk ditanami Ubi Kayu, Ubi Jalar"
+                print(SaranTanaman3)
+        else:
+            print("Hasil tidak cocok dengan data yang diberikan.")
+            
+        if P < target_P_Ubi :
+            SaranTanaman3 = "Perlu Perbaikan P Untuk ditanami Ubi Kayu, Ubi Jalar"
+            print(SaranTanaman3)
+            if P >= target_P_Ubi :
+                SaranTanaman3 = "Sangat Cocok Untuk ditanami Ubi Kayu, Ubi Jalar"
+                print(SaranTanaman3)
+        else:
+            print("Hasil tidak cocok dengan data yang diberikan.")
+        
+        if K < target_K_Ubi :
+            SaranTanaman3 = "Perlu Perbaikan K Untuk ditanami Ubi Kayu, Ubi Jalar"
+            print(SaranTanaman3)
+            if K >= target_K_Ubi :
+                SaranTanaman3 = "Sangat Cocok Untuk ditanami Ubi Kayu, Ubi Jalar"
+                print(SaranTanaman3)
+        else:
+            print("Hasil tidak cocok dengan data yang diberikan.")
+        
+        print(SaranTanaman1,", dan ", SaranTanaman2,", dan ", SaranTanaman3)
         lbp_histogram = calculate_normalized_lbp_histogram(img_gray)
         print("Program LBP selesai")
 
